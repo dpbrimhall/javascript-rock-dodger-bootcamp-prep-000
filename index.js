@@ -37,41 +37,34 @@ function checkCollision(rock) {
 
 
 function createRock(x) {
-  var rock = document.createElement('div')
+  const rock = document.createElement('div')
+
   rock.className = 'rock'
-  rock.style.top = '2px';
   rock.style.left = `${x}px`
-  
-  GAME.appendChild(rock);
-  
-  moveRock(rock);
-  
-  return rock;
-  
-}
-  
-  
 
+  var top = rock.style.top = 0
 
-function moveRock(rock) {
-  var top = 0;  
-  
-  function step() {
+  GAME.appendChild(rock)
+
+  function moveRock() {
     rock.style.top = `${top += 2}px`;
-      }
-  
-  window.requestAnimationFrame(step);
-  
-  if (checkCollision(rock)) {
-    endGame();
-  }
-  
-  ROCKS.push(rock);
-  
-  if (top > GAME_HEIGHT) {
-     rock.remove();
+
+    if (checkCollision(rock)) {
+      return endGame()
+    }
+
+    if (top < GAME_HEIGHT) {
+      window.requestAnimationFrame(moveRock)
+    } else {
+      rock.remove()
+    }
   }
 
+  window.requestAnimationFrame(moveRock)
+
+  ROCKS.push(rock)
+
+  return rock
 }
 
 function endGame() {
